@@ -13,9 +13,55 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function transform(arr) {
+  if(!Array.isArray(arr)){
+    throw new Error("'arr' parameter must be an instance of the Array!")
+  }
+
+  let newArr = [...arr];
+  const discardNext = '--discard-next';
+  const discardPrev = '--discard-prev';
+  const doubleNext = '--double-next';
+  const doublePrev = '--double-prev';
+
+  for(let i=0; i<newArr.length; i++){
+    if(newArr[i] === discardNext){
+      if(i<newArr.length-1){
+        newArr[i+1]=null;
+        newArr.splice(i, 1);
+      } else{
+        newArr.splice(i, 1);
+      }
+    }
+    if(newArr[i] === discardPrev){
+      if(i>0){
+        newArr.splice(i-1, 2);
+        i--;
+      }else{
+        newArr.splice(i, 1);
+      }
+    }
+    if(newArr[i]===doubleNext){
+      if(i<newArr.length - 1){
+        newArr[i]=newArr[i+1];
+      }else{
+        newArr.splice(i, 1);
+      }
+    }
+    if(newArr[i]=== doublePrev){
+      if(i<1 || i===null){
+        newArr.splice(i, 1);
+      }else{
+        newArr[i]= newArr[i-1];
+      }
+    }
+  }
+  for(let j=0; j<newArr.length; j++){
+    if(newArr[j]===null){
+      newArr.splice(j, 2);
+    }
+  }
+  return newArr;
 }
 
 module.exports = {
